@@ -123,21 +123,21 @@
  *         description: The item was not found
  */
 
-import express from 'express';
+import express from "express";
 import {
   getItems,
   getItemById,
   createItem,
   updateItem,
-  deleteItem
-} from '../controllers/itemController.mjs';
+  deleteItem,
+} from "../controllers/itemController.mjs";
 
 const router = express.Router();
 
-router.get('/', getItems);
-router.get('/:id', getItemById);
-router.post('/', createItem);
-router.put('/:id', updateItem);
-router.delete('/:id', deleteItem);
+router.get("/", getItems);
+router.get("/:id", getItemById);
+router.post("/", createItem);
+router.put("/:id", updateItem);
+router.delete("/:id", deleteItem);
 
 export default router;

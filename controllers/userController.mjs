@@ -1,17 +1,16 @@
-import { User } from '../models/userModel.mjs';
-import { userSchema } from '../schemas/userSchema.mjs';
+import User from "../models/userModel.mjs";
+import userSchema from "../schemas/userSchema.mjs";
 
-export const getUsers = (req, res) => {
-  res.json(User.getAll());
-};
+const DECIMAL = 10;
+
+export const getUsers = (req, res) => res.json(User.getAll());
 
 export const getUserById = (req, res) => {
-  const user = User.getById(parseInt(req.params.id));
+  const user = User.getById(parseInt(req.params.id, DECIMAL));
   if (user) {
-    res.json(user);
-  } else {
-    res.status(404).send('User not found');
+    return res.json(user);
   }
+  return res.status(404).send("User not found");
 };
 
 export const createUser = (req, res) => {
@@ -20,7 +19,7 @@ export const createUser = (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
   const newUser = User.create(value);
-  res.status(201).json(newUser);
+  return res.status(201).json(newUser);
 };
 
 export const updateUser = (req, res) => {
@@ -28,19 +27,17 @@ export const updateUser = (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const updatedUser = User.update(parseInt(req.params.id), value);
+  const updatedUser = User.update(parseInt(req.params.id, DECIMAL), value);
   if (updatedUser) {
-    res.json(updatedUser);
-  } else {
-    res.status(404).send('User not found');
+    return res.json(updatedUser);
   }
+  return res.status(404).send("User not found");
 };
 
 export const deleteUser = (req, res) => {
-  const deletedUser = User.delete(parseInt(req.params.id));
+  const deletedUser = User.delete(parseInt(req.params.id, DECIMAL));
   if (deletedUser) {
-    res.json(deletedUser);
-  } else {
-    res.status(404).send('User not found');
+    return res.json(deletedUser);
   }
+  return res.status(404).send("User not found");
 };
