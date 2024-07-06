@@ -8,5 +8,3 @@ router.use('/users', userRoutes);
 router.use('/items', itemRoutes);
 
 export default router;
-
-
