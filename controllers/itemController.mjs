@@ -1,17 +1,16 @@
-import { Item } from '../models/itemModel.mjs';
-import { itemSchema } from '../schemas/itemSchema.mjs';
+import Item from "../models/itemModel.mjs";
+import itemSchema from "../schemas/itemSchema.mjs";
 
-export const getItems = (req, res) => {
-  res.json(Item.getAll());
-};
+const DECIMAL = 10;
+
+export const getItems = (req, res) => res.json(Item.getAll());
 
 export const getItemById = (req, res) => {
-  const item = Item.getById(parseInt(req.params.id));
+  const item = Item.getById(parseInt(req.params.id, DECIMAL));
   if (item) {
-    res.json(item);
-  } else {
-    res.status(404).send('Item not found');
+    return res.json(item);
   }
+  return res.status(404).send("Item not found");
 };
 
 export const createItem = (req, res) => {
@@ -20,7 +19,7 @@ export const createItem = (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
   const newItem = Item.create(value);
-  res.status(201).json(newItem);
+  return res.status(201).json(newItem);
 };
 
 export const updateItem = (req, res) => {
@@ -28,19 +27,17 @@ export const updateItem = (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const updatedItem = Item.update(parseInt(req.params.id), value);
+  const updatedItem = Item.update(parseInt(req.params.id, DECIMAL), value);
   if (updatedItem) {
-    res.json(updatedItem);
-  } else {
-    res.status(404).send('Item not found');
+    return res.json(updatedItem);
   }
+  return res.status(404).send("Item not found");
 };
 
 export const deleteItem = (req, res) => {
-  const deletedItem = Item.delete(parseInt(req.params.id));
+  const deletedItem = Item.delete(parseInt(req.params.id, DECIMAL));
   if (deletedItem) {
-    res.json(deletedItem);
-  } else {
-    res.status(404).send('Item not found');
+    return res.json(deletedItem);
   }
+  return res.status(404).send("Item not found");
 };

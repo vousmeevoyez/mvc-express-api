@@ -1,8 +1,7 @@
-import express from 'express';
-import routes from './routes/index.mjs';
+import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-
+import routes from "./routes/index.mjs";
 
 const app = express();
 const port = 3000;
@@ -37,11 +36,11 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 app.use(express.json());
-app.use('/api', routes)
+app.use("/api", routes);
 app.use(
   "/api-docs",
   swaggerUi.serve,
-  swaggerUi.setup(specs, { explorer: true })
+  swaggerUi.setup(specs, { explorer: true }),
 );
 
 app.listen(port, () => {

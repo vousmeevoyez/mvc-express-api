@@ -1,9 +1,9 @@
-let items = [];
-let currentId = 1;
+const items = [];
+const currentId = 1;
 
-export class Item {
+export default class Item {
   constructor(data) {
-    this.id = currentId++;
+    this.id = currentId + 1;
     this.name = data.name;
     this.price = data.price;
   }
@@ -13,7 +13,7 @@ export class Item {
   }
 
   static getById(id) {
-    return items.find(item => item.id === id);
+    return items.find((item) => item.id === id);
   }
 
   static create(data) {
@@ -23,7 +23,7 @@ export class Item {
   }
 
   static update(id, data) {
-    const index = items.findIndex(item => item.id === id);
+    const index = items.findIndex((item) => item.id === id);
     if (index !== -1) {
       items[index] = { id, ...data };
       return items[index];
@@ -32,7 +32,7 @@ export class Item {
   }
 
   static delete(id) {
-    const index = items.findIndex(item => item.id === id);
+    const index = items.findIndex((item) => item.id === id);
     if (index !== -1) {
       return items.splice(index, 1);
     }
