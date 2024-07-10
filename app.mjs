@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
@@ -35,6 +36,7 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", routes);
 app.use(
