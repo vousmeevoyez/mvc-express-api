@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBox = document.getElementById("searchBox");
   const apiUrl = "http://localhost:3000/api/users";
 
+  // Fungsi untuk mengambil semua pengguna atau mencari pengguna berdasarkan query
   const fetchUsers = async (query = "") => {
     try {
       const response = await fetch(`${apiUrl}?text=${query}`);
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Fungsi untuk merender daftar pengguna ke dalam tabel
   const renderUsers = (users) => {
     userTableBody.innerHTML = "";
     users.forEach((user) => {
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userTableBody.appendChild(row);
     });
 
+    // Menambahkan event listener untuk tombol edit dan delete
     document.querySelectorAll(".edit-btn").forEach((button) => {
       button.addEventListener("click", () => editUser(button.dataset.id));
     });
@@ -42,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  // Fungsi untuk membuat pengguna baru
   const createUser = async (user) => {
     try {
       const response = await fetch(apiUrl, {
@@ -60,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Fungsi untuk memperbarui pengguna yang ada
   const updateUser = async (user) => {
     try {
       const response = await fetch(`${apiUrl}/${user.id}`, {
@@ -76,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Fungsi untuk menghapus pengguna berdasarkan ID
   const deleteUser = async (id) => {
     try {
       const response = await fetch(`${apiUrl}/${id}`, {
@@ -88,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Fungsi untuk mengedit pengguna berdasarkan ID
   const editUser = async (id) => {
     try {
       const response = await fetch(`${apiUrl}/${id}`);
@@ -103,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Fungsi untuk menampilkan pesan error
   const showError = (message) => {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = "block";
@@ -111,8 +119,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   };
 
-  userForm.addEventListener("submit", (event) => {
+  // Fungsi untuk memeriksa apakah pengguna dengan ID tertentu sudah ada
+  const userExists = async (id) => {
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error("Error checking user ID");
+      const users = await response.json();
+      return users.some((u) => u.id === id);
+    } catch (error) {
+      showError(error.message);
+      return false;
+    }
+  };
+
+  // Event listener untuk submit form pengguna
+  userForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    // Mendapatkan nilai dari form
     const userId = document.getElementById("userId").value;
     const user = {
       firstName: document.getElementById("firstName").value,
@@ -120,19 +144,58 @@ document.addEventListener("DOMContentLoaded", () => {
       phoneNumber: document.getElementById("phoneNumber").value,
       email: document.getElementById("email").value,
     };
+
+    // Pola validasi
+    const namePattern = /^[A-Za-z]+$/;
+    const phonePattern = /^(?:\+62|62|0)8[1-9][0-9]{6,9}$/;
+
+    // Validasi firstName dan lastName
+    if (!namePattern.test(user.firstName)) {
+      showError("First Name must only contain alphabetic characters.");
+      return;
+    }
+
+    if (!namePattern.test(user.lastName)) {
+      showError("Last Name must only contain alphabetic characters.");
+      return;
+    }
+
+    // Validasi phoneNumber
+    if (
+      !phonePattern.test(user.phoneNumber) ||
+      user.phoneNumber.length < 9 ||
+      user.phoneNumber.length > 12
+    ) {
+      showError(
+        "Phone Number must be between 9 and 12 digits and follow the required pattern.",
+      );
+      return;
+    }
+
+    // Memeriksa apakah ID pengguna sudah ada
+    if (userId && (await userExists(userId))) {
+      showError("User ID already exists.");
+      return;
+    }
+
+    // Membuat atau memperbarui pengguna
     if (userId) {
       user.id = userId;
       updateUser(user);
     } else {
       createUser(user);
     }
+
+    // Mengatur ulang form
     userForm.reset();
   });
 
+  // Event listener untuk kotak pencarian
   searchBox.addEventListener("input", (event) => {
     const query = event.target.value;
     fetchUsers(query);
   });
 
+  // Mengambil dan merender pengguna saat halaman dimuat
   fetchUsers();
 });

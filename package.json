@@ -6,7 +6,7 @@
   "scripts": {
     "server": "nodemon --experimental-modules app.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint '**/*.{js,mjs}' --ignore-pattern 'frontend/*'",
+    "lint": "eslint \"**/*.{js,mjs}\" --ignore-pattern \"frontend/*\"",
     "lint:fix": "eslint --fix && prettier --write '**/*.{js,mjs}'",
     "prepare": "husky"
   },
