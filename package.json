@@ -1,7 +1,7 @@
 {
   "name": "express-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "## Overview A simple REST API using Node.js, Express, ES6 modules (`.mjs`), and Swagger for documentation.",
   "main": "index.js",
   "scripts": {
     "server": "nodemon --experimental-modules app.mjs",
@@ -18,7 +18,7 @@
     "express": "^4.19.2",
     "joi": "^17.13.3",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^4.6.3"
   },
   "type": "module",
   "devDependencies": {
@@ -37,5 +37,13 @@
   },
   "engines": {
     "node": ">=8.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vousmeevoyez/mvc-express-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vousmeevoyez/mvc-express-api/issues"
+  },
+  "homepage": "https://github.com/vousmeevoyez/mvc-express-api#readme"
 }
