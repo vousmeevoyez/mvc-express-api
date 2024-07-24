@@ -23,13 +23,18 @@ export const getUserById = (req, res) => {
 };
 
 // Membuat pengguna baru
-export const createUser = (req, res) => {
+export const createUser = async (req, res) => {
   const { error, value } = userSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const newUser = User.create(value);
-  return res.status(201).json(newUser);
+  try {
+    const newUser = await User.create(value);
+    return res.status(201).json(newUser);
+  } catch (err) {
+    const { detail } = err;
+    return res.status(422).json({ error: detail });
+  }
 };
 
 // Memperbarui pengguna berdasarkan ID

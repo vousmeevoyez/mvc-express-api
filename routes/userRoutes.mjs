@@ -26,11 +26,15 @@
  *         phoneNumber:
  *           type: string
  *           description: The phone number user
+ *         password:
+ *           type: string
+ *           description: thepassword
  *       example:
  *         firstName: Kelvin
  *         lastName: Desman
  *         email: sampel@email.com
- *         phoneNumber: 6288888888888
+ *         phoneNumber: "62888881188"
+ *         password: password
  */
 
 /**
