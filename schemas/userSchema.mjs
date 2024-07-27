@@ -8,6 +8,7 @@ const userSchema = Joi.object({
   lastName: Joi.string().pattern(namePattern).min(3).optional(),
   phoneNumber: Joi.string().pattern(phonePattern).required(), // Hanya memungkinkan panjang 12 karakter
   email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
 });
 
 export default userSchema;
