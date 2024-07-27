@@ -9,7 +9,7 @@
     "lint": "eslint \"**/*.{js,mjs}\" --ignore-pattern \"frontend/*\"",
     "lint:fix": "eslint --fix && prettier --write '**/*.{js,mjs}'",
     "prepare": "husky",
-    "migrate": "knex migrate:latest"
+    "migrate": "./node_modules/knex/bin/cli.js migrate:latest"
   },
   "keywords": [],
   "author": "",

@@ -16,7 +16,7 @@ export default class User {
 
   // Membuat pengguna baru
   static async create({ password, ...data }) {
-    const hashedPassword = await bcrypt.hash("myPassword", saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const [{ id }] = await db("users")
       .insert({
         password: hashedPassword,
