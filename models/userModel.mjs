@@ -27,12 +27,22 @@ export default class User {
   }
 
   // Memperbarui pengguna berdasarkan ID
-  static update(id, data) {
-    return db("users").where({ id }).update(data);
+  static async update(id, data) {
+    const { password, ...otherData } = data;
+    const updatedData = { ...otherData };
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      updatedData.password = hashedPassword;
+    }
+
+    await db("users").where({ id }).update(data);
+
+    return { ...updatedData, id };
   }
 
   // Menghapus pengguna berdasarkan ID
-  static delete(id) {
-    return db("users").where({ id }).del();
+  static async delete(id) {
+    await db("users").where({ id }).del();
   }
 }

@@ -4,22 +4,19 @@ import userSchema from "../schemas/userSchema.mjs";
 const DECIMAL = 10;
 
 // Mendapatkan semua pengguna atau mencari pengguna berdasarkan query
-export const getUsers = (req, res) => {
-  const { text } = req.query;
-  if (text) {
-    const users = User.search(text);
-    return res.json(users);
-  }
-  return res.json(User.getAll());
+export const getUsers = async (req, res) => {
+  const users = await User.getAll();
+  return res.json(users);
 };
 
 // Mendapatkan pengguna berdasarkan ID
-export const getUserById = (req, res) => {
-  const user = User.getById(parseInt(req.params.id, DECIMAL));
+export const getUserById = async (req, res) => {
+  const userId = parseInt(req.params.id, DECIMAL);
+  const user = await User.getById(userId);
   if (user) {
     return res.json(user);
   }
-  return res.status(404).send("User not found");
+  return res.status(404).json({ error: "User not found" });
 };
 
 // Membuat pengguna baru
@@ -28,6 +25,7 @@ export const createUser = async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
+
   try {
     const newUser = await User.create(value);
     return res.status(201).json(newUser);
@@ -38,23 +36,31 @@ export const createUser = async (req, res) => {
 };
 
 // Memperbarui pengguna berdasarkan ID
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
   const { error, value } = userSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const updatedUser = User.update(parseInt(req.params.id, DECIMAL), value);
-  if (updatedUser) {
-    return res.json(updatedUser);
+
+  const userId = parseInt(req.params.id, DECIMAL);
+  const user = await User.getById(userId);
+  if (!user) return res.status(404).json({ error: "User not found" });
+
+  try {
+    const updatedUser = await User.update(userId, value);
+    return res.status(200).json(updatedUser);
+  } catch (err) {
+    const { detail } = err;
+    return res.status(422).json({ error: detail });
   }
-  return res.status(404).send("User not found");
 };
 
 // Menghapus pengguna berdasarkan ID
-export const deleteUser = (req, res) => {
-  const deletedUser = User.delete(parseInt(req.params.id, DECIMAL));
-  if (deletedUser) {
-    return res.json(deletedUser);
-  }
-  return res.status(404).send("User not found");
+export const deleteUser = async (req, res) => {
+  const userId = parseInt(req.params.id, DECIMAL);
+  const user = await User.getById(userId);
+  if (!user) return res.status(404).json({ error: "User not found" });
+
+  await User.delete(parseInt(req.params.id, DECIMAL));
+  return res.status(204).send();
 };
