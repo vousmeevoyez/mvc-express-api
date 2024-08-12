@@ -4,6 +4,10 @@
 
 ## Overview
 A simple REST API using Node.js, Express, ES6 modules (`.mjs`), and Swagger for documentation.
+- [Backend project](https://github.com/vousmeevoyez/mvc-express-api)
+- [Frontend project](https://github.com/vousmeevoyez/mvc-express-api)
+
+
 
 ## Features
 - CRUD operations
