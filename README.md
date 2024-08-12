@@ -1,6 +1,6 @@
 # Node.js Express REST API
 
-![project image](https://raw.githubusercontent.com/vousmeevoyez/mvc-express-api/main/assets/project.png)
+![project image](https://raw.githubusercontent.com/vousmeevoyez/mvc-express-api/main/assets/react-hook.png)
 
 ## Overview
 A simple REST API using Node.js, Express, ES6 modules (`.mjs`), and Swagger for documentation.
