@@ -34,7 +34,7 @@
  *         lastName: Desman
  *         email: sampel@email.com
  *         phoneNumber: "62888881188"
- *         password: password
+ *         password: Passw0rd!!!
  */
 
 /**
@@ -44,6 +44,8 @@
  *   description: The users API
  * /api/users:
  *   get:
+ *     security:
+ *       - Authorization: []
  *     summary: Lists all the users
  *     tags: [Users]
  *     responses:
@@ -75,6 +77,8 @@
  *         description: Some server error
  * /api/users/{id}:
  *   get:
+ *     security:
+ *       - Authorization: []
  *     summary: Get the user by id
  *     tags: [Users]
  *     parameters:
@@ -94,6 +98,8 @@
  *       404:
  *         description: The user was not found
  *   put:
+ *    security:
+ *       - Authorization: []
  *    summary: Update the user by the id
  *    tags: [Users]
  *    parameters:
@@ -121,6 +127,8 @@
  *      500:
  *        description: Some error happened
  *   delete:
+ *     security:
+ *       - Authorization: []
  *     summary: Remove the user by id
  *     tags: [Users]
  *     parameters:
@@ -139,6 +147,7 @@
  */
 
 import express from "express";
+import passport from "passport";
 import {
   getUsers,
   getUserById,
@@ -150,9 +159,21 @@ import {
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/:id", getUserById);
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  getUserById,
+);
 router.post("/", createUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  updateUser,
+);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  deleteUser,
+);
 
 export default router;

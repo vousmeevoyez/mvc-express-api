@@ -31,6 +31,8 @@
  *   description: The user profiles API
  * /api/user_profiles/{id}:
  *   post:
+ *    security:
+ *      - Authorization: []
  *    summary: add user profile
  *    consumes:
  *      - multipart/form-data
@@ -67,14 +69,101 @@
  *        description: The user was not found
  *      500:
  *        description: Some error happened
+ *
+ *   put:
+ *    security:
+ *      - Authorization: []
+ *    summary: edit user profile
+ *    consumes:
+ *      - multipart/form-data
+ *    tags: [UserProfiles]
+ *    parameters:
+ *      - in: path
+ *        name: user id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The user id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        multipart/form-data:
+ *          schema:
+ *             type: object
+ *             properties:
+ *               bio:
+ *                 type: string
+ *                 description: User profile bio
+ *                 required: false
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Profile image file
+ *                 required: false
+ *    responses:
+ *      201:
+ *        description: The user profile updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserProfile'
+ *      404:
+ *        description: The user was not found
+ *      500:
+ *        description: Some error happened
+ *
+ *   get:
+ *    security:
+ *      - Authorization: []
+ *    summary: get user profile
+ *    tags: [UserProfiles]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The user id
+ *    responses:
+ *      201:
+ *        description: The user profile
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserProfile'
+ *      404:
+ *        description: The user was not found
+ *      500:
+ *        description: Some error happened
  */
 
 import express from "express";
-import { createUserProfile } from "../controllers/userProfileController.mjs";
+import passport from "passport";
+import {
+  createUserProfile,
+  editUserProfile,
+  getUserProfile,
+} from "../controllers/userProfileController.mjs";
 import upload from "../middlewares/multer.mjs";
 
 const router = express.Router();
 
-router.post("/:id", upload.single("image"), createUserProfile);
+router.post(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  createUserProfile,
+);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  editUserProfile,
+);
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  getUserProfile,
+);
 
 export default router;

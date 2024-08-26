@@ -1,9 +1,12 @@
 import cors from "cors";
 import express from "express";
+import morgan from "morgan";
+import passport from "passport";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import routes from "./routes/index.mjs";
 import jsonErrorMiddleware from "./middlewares/jsonError.mjs";
+import passportStrategy from "./lib/passportStrategy.mjs";
 
 const app = express();
 const port = 3000;
@@ -26,7 +29,20 @@ const options = {
         email: "emailkalian@email.com",
       },
     },
+    components: {
+      securitySchemes: {
+        Authorization: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          value: "Bearer <JWT token here>",
+        },
+      },
+    },
     servers: [
+      {
+        url: "https://challenge-express-api.vercel.app",
+      },
       {
         url: "http://localhost:3000",
       },
@@ -42,6 +58,11 @@ const CSS_URL =
 
 app.use(cors());
 app.use(express.json());
+
+app.use(morgan("combined"));
+passport.use(passportStrategy);
+app.use(passport.initialize());
+
 app.use("/api", routes);
 app.use(
   "/",
