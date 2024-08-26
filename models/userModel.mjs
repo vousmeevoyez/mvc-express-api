@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import db from "../database/knex.mjs";
 
 const saltRounds = 10;
@@ -12,6 +12,20 @@ export default class User {
   // Mendapatkan pengguna berdasarkan ID
   static getById(id) {
     return db("users").where({ id }).first();
+  }
+
+  // Membuat pengguna baru
+  static async getByEmailPassword({ email, password }) {
+    const user = await db("users").where({ email }).first();
+    if (!user) {
+      throw new Error("User email not found");
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      throw new Error("Incorrect password");
+    }
+    return user;
   }
 
   // Membuat pengguna baru
