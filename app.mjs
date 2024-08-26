@@ -3,6 +3,7 @@ import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import routes from "./routes/index.mjs";
+import jsonErrorMiddleware from "./middlewares/jsonError.mjs";
 
 const app = express();
 const port = 3000;
@@ -47,6 +48,7 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(specs, { explorer: true, customCssUrl: CSS_URL }),
 );
+app.use(jsonErrorMiddleware);
 
 app.listen(port, () => {
   console.log(`API running at http://localhost:${port}`);
