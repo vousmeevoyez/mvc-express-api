@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import db from "../database/knex.mjs";
 
 const saltRounds = 10;
