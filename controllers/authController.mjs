@@ -1,5 +1,6 @@
 import User from "../models/userModel.mjs";
 import authSchema from "../schemas/authSchema.mjs";
+import generateJWT from "../lib/jwt.mjs";
 
 // Membuat pengguna baru
 const login = async (req, res) => {
@@ -18,7 +19,8 @@ const login = async (req, res) => {
 
   try {
     const user = await User.getByEmailPassword(value);
-    return res.status(200).json(user);
+    const auth = generateJWT(user);
+    return res.status(200).json(auth);
   } catch (err) {
     const { message } = err;
     return res.status(422).json({ error: message });

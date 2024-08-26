@@ -16,7 +16,16 @@
  *           description: thepassword
  *       example:
  *         email: sampel@email.com
- *         password: password
+ *         password: Passw0rd!!!
+ *
+ *     Token:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           description: JWT token
+ *       example:
+ *         token: JWTTOKEN
  */
 
 /**
@@ -40,7 +49,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Token'
  *       500:
  *         description: Some server error
  */
