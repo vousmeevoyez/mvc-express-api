@@ -15,6 +15,20 @@ export default class User {
   }
 
   // Membuat pengguna baru
+  static async getByEmailPassword({ email, password }) {
+    const user = await db("users").where({ email }).first();
+    if (!user) {
+      throw new Error("User email not found");
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      throw new Error("Incorrect password");
+    }
+    return user;
+  }
+
+  // Membuat pengguna baru
   static async create({ password, ...data }) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const [{ id }] = await db("users")
