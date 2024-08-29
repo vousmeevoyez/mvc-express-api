@@ -8,12 +8,8 @@ export default class UserProfile {
   }
 
   static async update(id, data) {
-    const { password, ...otherData } = data;
-    const updatedData = { ...otherData };
-
-    await db("user_profiles").where({ id }).update(data);
-
-    return { ...updatedData, id };
+    await db("user_profiles").where({ user_id: id }).update(data);
+    return data;
   }
 
   // Menghapus pengguna berdasarkan ID
