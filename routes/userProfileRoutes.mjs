@@ -79,7 +79,7 @@
  *    tags: [UserProfiles]
  *    parameters:
  *      - in: path
- *        name: user id
+ *        name: id
  *        schema:
  *          type: string
  *        required: true
