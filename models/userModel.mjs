@@ -15,16 +15,19 @@ export default class User {
   }
 
   // Membuat pengguna baru
-  static async getByEmailPassword({ email, password }) {
+  static async getByEmailPassword({ email, password, raiseError = true }) {
     const user = await db("users").where({ email }).first();
     if (!user) {
       throw new Error("User email not found");
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) {
-      throw new Error("Incorrect password");
+    if (password) {
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect && raiseError) {
+        throw new Error("Incorrect password");
+      }
     }
+
     return user;
   }
 
