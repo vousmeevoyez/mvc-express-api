@@ -1,4 +1,4 @@
-# Node.js Express REST API
+# Node.js Express REST API deployed to vercel using github actions
 
 ![project image](https://raw.githubusercontent.com/vousmeevoyez/mvc-express-api/main/assets/project.png)
 

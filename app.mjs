@@ -74,3 +74,5 @@ app.use(jsonErrorMiddleware);
 app.listen(port, () => {
   console.log(`API running at http://localhost:${port}`);
 });
+
+export default app;
